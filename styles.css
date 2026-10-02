@@ -1,0 +1,32 @@
+/* Project Scaffold —— 只做两件小事，样式跟随 Obsidian 原生 */
+
+.project-scaffold-input {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.project-scaffold-preview {
+  margin-top: 8px;
+  font-size: 0.85em;
+  opacity: 0.7;
+  min-height: 1.2em;
+  word-break: break-all;
+}
+
+.project-scaffold-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.project-scaffold-row .project-scaffold-title {
+  font-size: 0.95em;
+}
+
+.project-scaffold-hint {
+  font-size: 0.75em;
+  opacity: 0.6;
+  margin-top: 2px;
+  word-break: break-all;
+}

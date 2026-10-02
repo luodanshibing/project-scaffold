@@ -1,0 +1,9 @@
+{
+  "id": "project-scaffold",
+  "name": "Project Scaffold",
+  "version": "1.1.1",
+  "minAppVersion": "1.4.0",
+  "description": "按指定目录树新建项目，可选模板交给 Templater 渲染。",
+  "author": "luodanshibing",
+  "isDesktopOnly": false
+}
