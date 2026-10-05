@@ -173,3 +173,7 @@ node tools/test-flows.mjs  # 39 项流程测试（内存假库，跑真实的建
 ```
 
 `main.js` 既是源码也是产物，**没有构建步骤**。`tools/deploy.ps1`（或双击 `deploy.bat`）会把插件复制进库并补齐脚手架目录。
+
+### 许可证
+
+[MIT](LICENSE) © 2026 luodanshibing
