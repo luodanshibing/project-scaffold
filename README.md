@@ -1,4 +1,4 @@
-# Project Scaffold
+﻿# Project Scaffold
 
 [English](#english) · [简体中文](#简体中文)
 
@@ -108,7 +108,7 @@ node tools/test-flows.mjs  # 39 assertions, runs the real create flows against a
 
 ### License
 
-No license file yet. If you plan to submit this to the community plugin list, adding one (MIT is the common choice) is recommended.
+[MIT](LICENSE) © 2026 luodanshibing
 
 ---
 
@@ -177,3 +177,4 @@ node tools/test-flows.mjs  # 39 项流程测试（内存假库，跑真实的建
 ### 许可证
 
 [MIT](LICENSE) © 2026 luodanshibing
+
