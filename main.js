@@ -372,19 +372,19 @@ class ProjectScaffoldPlugin extends Plugin {
 
     this.addCommand({
       id: 'new-project',
-      name: '新建项目（按脚手架铺目录）',
+      name: '新建项目目录',
       callback: () => this.newProjectFlow(),
     });
 
     this.addCommand({
       id: 'new-project-doc',
-      name: '新建项目文档（选择项目路径）',
+      name: '新建项目文档',
       callback: () => this.newDocFlow(),
     });
 
     this.addCommand({
       id: 'init-scaffold',
-      name: '初始化 / 修复脚手架模板目录',
+      name: '初始化脚手架模板目录',
       callback: () => this.initScaffoldFlow(),
     });
 
@@ -552,7 +552,7 @@ class ProjectScaffoldPlugin extends Plugin {
           new Notice(`Templater 处理失败，改用纯文本：${e.message || e}`);
         }
       } else {
-        new Notice('未检测到 Templater，该模板按纯文本处理（<% %> 会原样保留）');
+        new Notice('未检测到 Templater，按纯文本处理');
       }
     }
 
@@ -566,7 +566,7 @@ class ProjectScaffoldPlugin extends Plugin {
           new Notice(`QuickAdd 处理失败，改用纯文本：${e.message || e}`);
         }
       } else {
-        new Notice('未检测到 QuickAdd，该模板按纯文本处理（{{ }} 会按本插件规则替换）');
+        new Notice('未检测到 QuickAdd，按纯文本处理');
       }
     }
     body = renderTemplate(body, vars || {});
@@ -849,8 +849,8 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
     containerEl.createEl('h3', { text: '脚手架（新建项目时铺哪些文件夹）' });
 
     new Setting(containerEl)
-      .setName('脚手架模板根目录')
-      .setDesc('库里的真实目录。每个项目类型对应它下面一个同名子文件夹。想改层级，直接在这个目录里加/删文件夹即可。')
+      .setName('模板根目录')
+      .setDesc('每个项目类型对应下面一个同名子文件夹；增删文件夹即可改层级')
       .addText((t) =>
         t.setPlaceholder('1 Obsidian/项目脚手架').setValue(s.scaffoldRoot).onChange(async (v) => {
           s.scaffoldRoot = toPosix(v);
@@ -859,7 +859,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName('路径候选的最深层级')
+      .setName('候选路径层级')
       .setDesc('0 = 只列项目文件夹；1 = 再往里一层；2 = 两层（例如 04 研发/02 机械）。')
       .addText((t) =>
         t.setPlaceholder('2').setValue(String(s.maxDepthBelowProject)).onChange(async (v) => {
@@ -870,8 +870,8 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
       );
 
     new Setting(containerEl)
-      .setName('不进候选列表的文件夹名')
-      .setDesc('逗号分隔，按文件夹名精确匹配。默认排除“附件”——它放素材，不是文档存放位置。')
+      .setName('排除的文件夹')
+      .setDesc('逗号分隔，按文件夹名精确匹配')
       .addText((t) =>
         t.setPlaceholder('附件').setValue((s.ignoreFolders || []).join(',')).onChange(async (v) => {
           s.ignoreFolders = v.split(/[,，]/).map((x) => x.trim()).filter(Boolean);
@@ -911,7 +911,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
 
       new Setting(containerEl)
         .setName('文件名前缀')
-        .setDesc('项目文件夹名最前面的字母，例如 F（工作）/ E（生活）/ D（学习）。')
+        .setDesc('项目文件夹名前缀字母，如 F.261002')
         .addText((t) =>
           t.setPlaceholder('F').setValue(cat.prefix).onChange(async (v) => {
             cat.prefix = v.trim();
@@ -921,7 +921,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
 
       new Setting(containerEl)
         .setName('日期与名称的分隔符')
-        .setDesc('工作与生活用 -（F.261002-减速机）；学习用空格（D.261002 数据库）。')
+        .setDesc('前缀与名称之间的分隔符')
         .addText((t) =>
           t.setPlaceholder('-').setValue(cat.separator).onChange(async (v) => {
             cat.separator = v;
@@ -931,7 +931,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
 
       new Setting(containerEl)
         .setName('新建时的默认模板')
-        .setDesc('填模板文件的库内路径（留空 = 每次弹窗询问）。在模板选择器里按“回车”预选它。')
+        .setDesc('留空则每次询问；模板选择器里按回车即预选')
         .addText((t) =>
           t.setPlaceholder('1 Obsidian/模板/【项目章程】….md').setValue(cat.defaultTemplate || '').onChange(async (v) => {
             cat.defaultTemplate = v.trim();
@@ -955,7 +955,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName('模板文件夹')
-      .setDesc('模板选择器会列出这个目录（含子目录）下的所有 .md。默认与 Templater 的设置一致。')
+      .setDesc('选择器列出该目录（含子目录）下的 .md；默认与 Templater 一致')
       .addText((t) =>
         t.setPlaceholder('1 Obsidian/模板').setValue(s.templateFolder || '').onChange(async (v) => {
           s.templateFolder = toPosix(v);
@@ -981,7 +981,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
 
     new Setting(containerEl)
       .setName('新建项目 / 文档时询问模板')
-      .setDesc('关闭后不再弹模板选择器，直接用上面对应的默认模板（都没配就只建文件夹/空文档）。')
+      .setDesc('关闭则不再询问，直接用默认模板')
       .addToggle((t) =>
         t.setValue(!!s.askTemplate).onChange(async (v) => {
           s.askTemplate = v;
@@ -1003,7 +1003,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
     containerEl.createEl('h3', { text: '关于数据' });
     containerEl.createEl('p', {
       cls: 'setting-item-description',
-      text: '脚手架＝库里的真实文件夹，插件卸载后依然在；“最近用过”的记录存在插件自己的 data.json 里（纯 JSON，删了只丢顺序）。本插件只新建文件夹与文档，从不修改任何已有笔记；遇到同名文件一律停下提示，不覆盖。',
+      text: '只新建文件夹与文档，不修改已有笔记；遇同名文件会停下提示',
     });
   }
 }
