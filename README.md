@@ -27,7 +27,7 @@ Project Scaffold fills exactly that gap: a scaffolding step, and a project-aware
 
 | Command | What it does |
 |---|---|
-| **New project (scaffold folders)** | Pick a category (Work / Life / Study) → type a project name → creates `F.260603-ProjectName` and copies the whole template tree `<scaffold root>/<category>/` into it |
+| **New project (scaffold folders)** | Pick a category (Work / Life / Study) → type the number and the name (e.g. `260701-Worm-gear-test-rig`) → creates `F.260701-Worm-gear-test-rig` and copies the whole template tree `<scaffold root>/<category>/` into it |
 | **New project document (pick project path)** | Opens a folder picker limited to your project roots, ranked by recency; then creates the note there |
 | **Initialize / repair scaffold template folders** | Creates the missing empty folders of the built-in skeleton inside the vault |
 
@@ -135,7 +135,7 @@ QuickAdd / Templater 擅长"在固定目录里照模板建一篇笔记"，但它
 
 | 命令 | 作用 |
 |---|---|
-| **新建项目目录** | 选类型（工作/生活/学习）→ 输项目名 → 建出 `F.260603-项目名` 并复制 `<脚手架根>/<类型>/` 整棵树 |
+| **新建项目目录** | 选类型（工作/生活/学习）→ 自己填编号与名称（例 `260701-电关节测试台`）→ 建出 `F.260701-电关节测试台` 并复制 `<脚手架根>/<类型>/` 整棵树 |
 | **新建项目文档** | 只列项目根目录下的路径并按最近使用排序，选定后在该目录建文档 |
 | **初始化脚手架模板目录** | 按内置骨架补齐缺失的空文件夹 |
 

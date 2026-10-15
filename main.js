@@ -1,7 +1,7 @@
 'use strict';
 
 /* ==========================================================================
- * Project Scaffold（项目脚手架）v1.1.0
+ * Project Scaffold（项目脚手架）v1.2.0
  * --------------------------------------------------------------------------
  * 只做两件事，且只“新建”，从不改动任何已有笔记：
  *   ① 新建项目：把库内 <脚手架根>/<类型>/ 这棵真实目录树复制成新项目
@@ -84,13 +84,16 @@ function formatDateToken(date, format) {
   }
 }
 
-/** 新建项目用：F.260603-减速机半自动装配线 */
-function buildProjectName(category, title, date) {
-  const clean = String(title == null ? '' : title).trim().replace(/[\\/:*?"<>|]/g, '');
-  const stamp = formatDateToken(date, 'YYMMDD');
-  const sep = category && category.separator !== undefined ? category.separator : '-';
+/** 新建项目用：F.<编号>-<名称>。编号由用户填写（F.YYMMXX：YY 年、MM 月、XX 流水号），插件不猜日期。
+ *  输入两种写法都行：`260701-电关节…`（自带分隔符）或 `260701 电关节…`（用设置里的分隔符）。 */
+function buildProjectName(category, input) {
   const prefix = (category && category.prefix) || '';
-  return `${prefix}.${stamp}${sep}${clean}`;
+  const sep = category && category.separator !== undefined ? category.separator : '-';
+  const raw = String(input == null ? '' : input).trim().replace(/[\\/:*?"<>|]/g, '');
+  if (!raw) return prefix;
+  const m = /^([0-9A-Za-z]{2,10})\s+(.+)$/.exec(raw);
+  const body = m ? `${m[1]}${sep}${m[2].trim()}` : raw;
+  return `${prefix}.${body}`;
 }
 
 /**
@@ -603,12 +606,11 @@ class ProjectScaffoldPlugin extends Plugin {
   }
 
   askProjectName(cat) {
-    const today = new Date();
     new TextPromptModal(this.app, {
       title: `新建${cat.key}项目`,
       description: `将创建在：${cat.root}/`,
-      placeholder: '项目名称（不含日期前缀）',
-      preview: (v) => `文件夹名：${buildProjectName(cat, v, today)}`,
+      placeholder: '编号+名称，例：260701-电关节疲劳寿命测试台（编号 YYMMXX，XX 是流水号，自己填）',
+      preview: (v) => `文件夹名：${buildProjectName(cat, v)}`,
       onSubmit: (title) => this.askProjectTemplate(cat, title),
     }).open();
   }
@@ -883,7 +885,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
     containerEl.createEl('h3', { text: '项目类型（新建时怎么命名、放哪儿）' });
     containerEl.createEl('p', {
       cls: 'setting-item-description',
-      text: '每个类型四个字段：显示名 / 建在哪个目录 / 文件名前缀 / 日期与名称之间的分隔符。改完即时生效，不用重启。',
+      text: '每个类型四个字段：显示名 / 建在哪个目录 / 文件名前缀 / 编号与名称之间的分隔符。新建时编号由你自己填（插件不会按当天日期生成，避免同一天重号）。',
     });
 
     s.categories.forEach((cat, i) => {
@@ -920,8 +922,8 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
         );
 
       new Setting(containerEl)
-        .setName('日期与名称的分隔符')
-        .setDesc('前缀与名称之间的分隔符')
+        .setName('编号与名称的分隔符')
+        .setDesc('你填的编号与名称之间的分隔符。')
         .addText((t) =>
           t.setPlaceholder('-').setValue(cat.separator).onChange(async (v) => {
             cat.separator = v;
@@ -940,7 +942,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
         );
 
       const previewEl = containerEl.createEl('p', { cls: 'setting-item-description' });
-    previewEl.setText(`预览：新建「减速机」→ ${buildProjectName(cat, '减速机', new Date())}`);
+      previewEl.setText(`预览：新建「减速机」→ ${buildProjectName(cat, '260701-减速机')}（编号由你填，插件不再自动加日期）`);
     });
 
     /* ---- 模板 ---- */

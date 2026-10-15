@@ -66,12 +66,16 @@ const CAT_WORK = { key: '工作', root: 'F Craftlab/F2 项目', prefix: 'F', sep
 const CAT_LIFE = { key: '生活', root: 'E Yearify/E3 项目', prefix: 'E', separator: '-' };
 const CAT_STUDY = { key: '学习', root: 'D Develo/D2 知识领域', prefix: 'D', separator: ' ' };
 
-/* ============ 1. 命名生成 ============ */
-eq(buildProjectName(CAT_WORK, '减速机半自动装配线', new Date(2026, 5, 3)), 'F.260603-减速机半自动装配线', '工作类命名');
-eq(buildProjectName(CAT_LIFE, 'DIY电脑机箱设计', new Date(2025, 5, 1)), 'E.250601-DIY电脑机箱设计', '生活类命名');
-eq(buildProjectName(CAT_STUDY, '数据库学习与实践', new Date(2026, 5, 1)), 'D.260601 数据库学习与实践', '学习类命名（空格分隔）');
-eq(buildProjectName(CAT_WORK, 'a/b:c*name', new Date(2026, 0, 9)), 'F.260109-abcname', '非法字符被剔除');
-eq(buildProjectName(CAT_WORK, '  前后空格  ', new Date(2026, 0, 9)), 'F.260109-前后空格', '首尾空格被剔除');
+/* ============ 1. 命名生成（编号由用户填，插件不预填日期） ============ */
+eq(buildProjectName(CAT_WORK, '260603-减速机半自动装配线'), 'F.260603-减速机半自动装配线', '工作类命名（编号由用户填）');
+eq(buildProjectName(CAT_LIFE, '250601-DIY电脑机箱设计'), 'E.250601-DIY电脑机箱设计', '生活类命名');
+eq(buildProjectName(CAT_STUDY, '260601 数据库学习与实践'), 'D.260601 数据库学习与实践', '输入用空格 → 用设置里的分隔符');
+eq(buildProjectName(CAT_WORK, '260109-a/b:c*name'), 'F.260109-abcname', '非法字符被剔除');
+eq(buildProjectName(CAT_WORK, '  260109-前后空格  '), 'F.260109-前后空格', '首尾空格被剔除');
+eq(buildProjectName(CAT_WORK, '260701-电关节疲劳寿命测试台'), 'F.260701-电关节疲劳寿命测试台', '真实场景：用户自己写编号（含流水号）');
+eq(buildProjectName(CAT_WORK, ''), 'F', '空输入 → 只剩前缀（输入框会拦空值）');
+eq(buildProjectName(CAT_WORK, '减速机半自动装配线'), 'F.减速机半自动装配线', '只写名称时不补编号（不改用当天日期）');
+eq(buildProjectName(CAT_WORK, '260101-A') !== buildProjectName(CAT_WORK, '260102-B'), true, '同一天建两个项目不会重号（编号由用户决定）');
 
 /* ============ 2. 识别既有格式（兼容历史） ============ */
 eq(parseProjectFolderName('F.260603-减速机半自动装配线'), { prefix: 'F', stamp: '260603', separator: '-', title: '减速机半自动装配线' }, '识别工作类');

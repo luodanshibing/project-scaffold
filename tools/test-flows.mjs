@@ -193,8 +193,8 @@ eq(cands.length, 4, `候选数量（F 项目 3 个 + D 项目 1 个，实际 ${c
 
 /* ---- 新建项目 ---- */
 notices.length = 0;
-await plugin.createProject(plugin.settings.categories[0], '测试项目');
-const created = Array.from(vault.map.keys()).filter((k) => /^F Craftlab\/F2 项目\/F\.\d{6}-测试项目$/.test(k));
+await plugin.createProject(plugin.settings.categories[0], '260603-测试项目');
+const created = Array.from(vault.map.keys()).filter((k) => /^F Craftlab\/F2 项目\/F\.260603-测试项目$/.test(k));
 eq(created.length, 1, '新建出了 1 个项目文件夹');
 const projPath = created[0];
 ok(!!vault.getAbstractFileByPath(`${projPath}/01 管理`), '脚手架一级目录已复制');
@@ -208,7 +208,7 @@ ok(notices.some((n) => n.includes('已创建项目')), '成功时给出提示');
 /* ---- 重复新建不覆盖 ---- */
 const before = vault.map.size;
 notices.length = 0;
-await plugin.createProject(plugin.settings.categories[0], '测试项目');
+await plugin.createProject(plugin.settings.categories[0], '260603-测试项目');
 eq(vault.map.size, before, '同名项目再次新建时不产生任何新对象');
 ok(notices.some((n) => n.includes('已存在')), '同名时提示已存在');
 
@@ -254,7 +254,7 @@ await plugin.createFromTemplate('1 Obsidian/模板/测试模板.md', `${projPath
 const tplDoc = vault.getAbstractFileByPath(`${projPath}/01 管理/模板文档.md`);
 ok(!!tplDoc, '纯文本模板能生成文档');
 ok(tplDoc && tplDoc.data.includes(`路径：${projPath}`), '模板里的 {{项目路径}} 被替换');
-ok(tplDoc && tplDoc.data.includes('F.261002-测试项目'), '模板里的 {{项目名}} 被替换');
+ok(tplDoc && tplDoc.data.includes('# 测试项目'), '模板里的 {{项目名}} 被替换');
 ok(plugin.recentTemplates.includes('1 Obsidian/模板/测试模板.md'), '模板使用记录被保存（下次排在前面）');
 
 /* ---- 模板集成：QuickAdd 语法走 quickadd.api.format() ---- */
