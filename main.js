@@ -628,7 +628,7 @@ class ProjectScaffoldPlugin extends Plugin {
 
   async createProject(cat, title, templatePath) {
     const now = new Date();
-    const folderName = buildProjectName(cat, title, now);
+    const folderName = buildProjectName(cat, title);
     const projectPath = toPosix(`${cat.root}/${folderName}`);
     if (this.app.vault.getAbstractFileByPath(projectPath)) {
       new Notice(`已存在，未做任何改动：${folderName}`);
@@ -940,7 +940,7 @@ class ProjectScaffoldSettingTab extends PluginSettingTab {
         );
 
       const previewEl = containerEl.createEl('p', { cls: 'setting-item-description' });
-      previewEl.setText(`预览：新建「减速机」→ ${buildProjectName(cat, '减速机', new Date())}`);
+    previewEl.setText(`预览：新建「减速机」→ ${buildProjectName(cat, '减速机', new Date())}`);
     });
 
     /* ---- 模板 ---- */
